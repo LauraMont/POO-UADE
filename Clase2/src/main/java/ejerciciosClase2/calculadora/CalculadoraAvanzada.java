@@ -1,4 +1,4 @@
-package ejCalculadora.example.calculadora;
+package ejerciciosClase2.calculadora;
 
 public class CalculadoraAvanzada extends Calculadora{
     public static double modulo(double nro1, double nro2){

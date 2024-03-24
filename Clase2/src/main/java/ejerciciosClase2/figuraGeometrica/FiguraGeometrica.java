@@ -1,4 +1,4 @@
-package ejCalculadora.example.figuraGeometrica;
+package ejerciciosClase2.figuraGeometrica;
 
 public class FiguraGeometrica {
     public double area(){

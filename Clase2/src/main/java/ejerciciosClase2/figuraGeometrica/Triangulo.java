@@ -1,7 +1,8 @@
-package ejCalculadora.example.figuraGeometrica;
+package ejerciciosClase2.figuraGeometrica;
 
 public class Triangulo extends FiguraGeometrica{
     double lado;
+    //para simplificar el calculo se supone triangulos equilateros
     public Triangulo(double ladoAux){
         lado = ladoAux;
     }
