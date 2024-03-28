@@ -1,7 +1,5 @@
 package ejerciciosClase2.figuraGeometrica;
 
-public class FiguraGeometrica {
-    public double area(){
-        return 0;
-    }
+public abstract class FiguraGeometrica {
+    public abstract double area();
 }
