@@ -1,0 +1,54 @@
+@startuml
+abstract        vehiculo
+class           cliente
+class           automovil
+class           bicicleta
+class           motocicleta
+class           gestorAlquiler
+
+vehiculo *-- bicicleta
+vehiculo *-- automovil
+vehiculo *-- motocicleta
+gestorAlquiler *-- cliente
+gestorAlquiler *-- vehiculo
+cliente o-- vehiculo
+
+class cliente{
+     {private} long dni
+     {private} string direccion
+     {private} string nombre
+     {private} int nroCliente
+}
+
+class gestorAlquiler{
+    list<bicicleta>
+    list<automovil>
+    list<motocicleta>
+    list<cliente>
+    alquilarVehiculo()
+    listadoDeVehiculos()
+}
+
+abstract vehiculo{
+     string id;
+     boolean estaOcupado;
+     string fechaRegistro;
+     vehiculoOcupado()
+}
+
+annotation      annotation
+circle          circle
+()              circle_short_form
+class           class
+class           class_stereo  <<stereotype>>
+diamond         diamond
+<>              diamond_short_form
+entity          entity
+enum            enum
+exception       exception
+interface       interface
+metaclass       metaclass
+protocol        protocol
+stereotype      stereotype
+struct          struct
+@enduml
