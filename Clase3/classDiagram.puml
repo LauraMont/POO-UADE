@@ -1,4 +1,6 @@
 @startuml
+
+class           persona
 abstract        vehiculo
 class           cliente
 class           automovil
@@ -6,49 +8,69 @@ class           bicicleta
 class           motocicleta
 class           gestorAlquiler
 
-vehiculo *-- bicicleta
-vehiculo *-- automovil
-vehiculo *-- motocicleta
-gestorAlquiler *-- cliente
-gestorAlquiler *-- vehiculo
-cliente o-- vehiculo
+vehiculo <|-- bicicleta
+vehiculo <|-- automovil
+vehiculo <|-- motocicleta
+gestorAlquiler o-- cliente
+gestorAlquiler o-- vehiculo
+persona <|-- cliente
+
+abstract persona{
+     # {abstract} long dni
+     # {abstract} String direccion
+     # {abstract} String nombre
+     + persona(long:dni, String direccion, String nombre)
+}
 
 class cliente{
-     {private} long dni
-     {private} string direccion
-     {private} string nombre
-     {private} int nroCliente
+     - int nroCliente
+     - String vehiculoId
+     + cliente(persona)
 }
 
 class gestorAlquiler{
-    list<bicicleta>
-    list<automovil>
-    list<motocicleta>
-    list<cliente>
-    alquilarVehiculo()
-    listadoDeVehiculos()
+    - list<vehiculo>
+    - list<cliente>
+    - int contadorBicicletasDisponibles
+    - int contadorAutomovilDisponibles
+    - int contadorMotocicletaDisponibles
+    + gestorAlquiler(int:bicicletas, int motocicletas, int automovil)
+    + gestorAlquiler()
+    + agregarBicicletas(int cantidad)
+    + agregarMotocicletas(int cantidad)
+    + agregarVehiculos(int cantidad)
+    + alquilarVehiculo()
+    + listadoDeAutomovil()
 }
 
 abstract vehiculo{
-     string id;
-     boolean estaOcupado;
-     string fechaRegistro;
-     vehiculoOcupado()
+     #  {abstract} string id;
+     #  {abstract} boolean estaOcupado;
+     #  {abstract} string fechaUltimoRegistro;
+     #  {abstract} string fechaUltimaDevolucion;
+     #  {abstract} vehiculoEstaOcupado()
+     #  {abstract} reservarVehiculo()
+     #  {abstract} devolverVehiculo()
+     #  {abstract} obtenerId()
+     #  {abstract} costoActual()
 }
 
-annotation      annotation
-circle          circle
-()              circle_short_form
-class           class
-class           class_stereo  <<stereotype>>
-diamond         diamond
-<>              diamond_short_form
-entity          entity
-enum            enum
-exception       exception
-interface       interface
-metaclass       metaclass
-protocol        protocol
-stereotype      stereotype
-struct          struct
+class automovil{
+     - String ID_AUT
+     - int COSTO_DIA
+     + automovil()
+}
+
+class bicicleta{
+     - String ID_BIC
+     - int COSTO_HORA
+     + bicicleta()
+}
+
+class motocicleta{
+     - String ID_MOTO
+     - int COSTO_DIA
+     + motocicleta()
+}
+
 @enduml
