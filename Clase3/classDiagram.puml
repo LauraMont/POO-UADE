@@ -1,49 +1,53 @@
 @startuml
 
-class           persona
-abstract        vehiculo
-class           cliente
-class           automovil
-class           bicicleta
-class           motocicleta
-class           gestorAlquiler
+class           Persona
+abstract        Vehiculo
+class           Cliente
+class           Automovil
+class           Bicicleta
+class           Motocicleta
+class           GestorAlquiler
 
-vehiculo <|-- bicicleta
-vehiculo <|-- automovil
-vehiculo <|-- motocicleta
-gestorAlquiler o-- cliente
-gestorAlquiler o-- vehiculo
-persona <|-- cliente
+Vehiculo <|-- Bicicleta
+Vehiculo <|-- Automovil
+Vehiculo <|-- Motocicleta
+GestorAlquiler o-- Cliente
+GestorAlquiler o-- Vehiculo
 
-abstract persona{
+Persona <|-- Cliente
+
+abstract Persona{
      # {abstract} long dni
      # {abstract} String direccion
      # {abstract} String nombre
      + persona(long:dni, String direccion, String nombre)
 }
 
-class cliente{
+class Cliente{
      - int nroCliente
      - String vehiculoId
-     + cliente(persona)
+     + cliente(Persona)
 }
 
-class gestorAlquiler{
-    - list<vehiculo>
-    - list<cliente>
+class GestorAlquiler{
+    - list<Vehiculo>
+    - list<Cliente>
     - int contadorBicicletasDisponibles
     - int contadorAutomovilDisponibles
     - int contadorMotocicletaDisponibles
-    + gestorAlquiler(int:bicicletas, int motocicletas, int automovil)
+    + gestorAlquiler(int:Bicicletas, int Motocicletas, int Automovil)
     + gestorAlquiler()
     + agregarBicicletas(int cantidad)
     + agregarMotocicletas(int cantidad)
     + agregarVehiculos(int cantidad)
-    + alquilarVehiculo()
-    + listadoDeAutomovil()
+    + agregarCliente(Persona)
+    + alquilarVehiculo(int idVehiculo, int idCliente)
+    + devolucionVehiculo(int idVehiculo, int idCliente)
+    + listadoDeVehiculos()
+    + listadoDeClientes()
 }
 
-abstract vehiculo{
+abstract Vehiculo{
      #  {abstract} string id;
      #  {abstract} boolean estaOcupado;
      #  {abstract} string fechaUltimoRegistro;
@@ -55,22 +59,22 @@ abstract vehiculo{
      #  {abstract} costoActual()
 }
 
-class automovil{
+class Automovil{
      - String ID_AUT
      - int COSTO_DIA
      + automovil()
 }
 
-class bicicleta{
+class Bicicleta{
      - String ID_BIC
      - int COSTO_HORA
      + bicicleta()
 }
 
-class motocicleta{
+class Motocicleta{
      - String ID_MOTO
      - int COSTO_DIA
-     + motocicleta()
+     + Motocicleta()
 }
 
 @enduml
