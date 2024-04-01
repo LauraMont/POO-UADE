@@ -1,17 +1,21 @@
 package Clase3;
 
+import GestorAlquiler.GestorAlquiler;
+
+import java.util.Random;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        GestorAlquiler sistema = new GestorAlquiler(1,1,1);
+        System.out.println("\nSistema en estado inicial:");
+        System.out.println(sistema.listadoDeClientes());
+        System.out.println(sistema.listadoDeVehiculos());
+        sistema.agregarCliente(21232,"av 1234","analia");
+        sistema.alquilarAutomovil();
+        System.out.println("\nSistema al reservar vehiculo con nuevo cliente:");
+        System.out.println(sistema.listadoDeClientes());
+        System.out.println(sistema.listadoDeVehiculos());
     }
 }

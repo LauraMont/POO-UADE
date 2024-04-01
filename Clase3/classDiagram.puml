@@ -1,6 +1,5 @@
 @startuml
 
-class           Persona
 abstract        Vehiculo
 class           Cliente
 class           Automovil
@@ -11,70 +10,63 @@ class           GestorAlquiler
 Vehiculo <|-- Bicicleta
 Vehiculo <|-- Automovil
 Vehiculo <|-- Motocicleta
-GestorAlquiler o-- Cliente
-GestorAlquiler o-- Vehiculo
-
-Persona <|-- Cliente
-
-abstract Persona{
-     # {abstract} long dni
-     # {abstract} String direccion
-     # {abstract} String nombre
-     + persona(long:dni, String direccion, String nombre)
-}
+GestorAlquiler *-- Cliente :> contiene
+GestorAlquiler *-- Vehiculo :> contiene
+Cliente -- Vehiculo :> reserva
 
 class Cliente{
      - int nroCliente
+     - dni: long
+     - direccion: String
+     - nombre: String
      - String vehiculoId
-     + cliente(Persona)
+     + Cliente(long:dni, String:direccion, String:nombre)
 }
 
 class GestorAlquiler{
-    - list<Vehiculo>
-    - list<Cliente>
-    - int contadorBicicletasDisponibles
-    - int contadorAutomovilDisponibles
-    - int contadorMotocicletaDisponibles
-    + gestorAlquiler(int:Bicicletas, int Motocicletas, int Automovil)
-    + gestorAlquiler()
+    - vehiculos: List<Vehiculo>
+    - clientes: List<Cliente>
+    + GestorAlquiler(int:Bicicletas, int: Motocicletas, int: Automovil)
+    + GestorAlquiler()
     + agregarBicicletas(int cantidad)
     + agregarMotocicletas(int cantidad)
-    + agregarVehiculos(int cantidad)
-    + agregarCliente(Persona)
-    + alquilarVehiculo(int idVehiculo, int idCliente)
-    + devolucionVehiculo(int idVehiculo, int idCliente)
+    + agregarAutomovil(int cantidad)
+    + agregarCliente(long:dni, String:direccion, String:nombre)
+    + alquilarBicicletas(int: idCliente)
+    + alquilarMotocicletas(int: idCliente)
+    + alquilarAutomovil(int: idCliente)
+    + devolucionVehiculo(int: idVehiculo, int: idCliente)
     + listadoDeVehiculos()
     + listadoDeClientes()
+    - nroId()
 }
 
 abstract Vehiculo{
-     #  {abstract} string id;
-     #  {abstract} boolean estaOcupado;
-     #  {abstract} string fechaUltimoRegistro;
-     #  {abstract} string fechaUltimaDevolucion;
-     #  {abstract} vehiculoEstaOcupado()
-     #  {abstract} reservarVehiculo()
-     #  {abstract} devolverVehiculo()
-     #  {abstract} obtenerId()
+     #  id: string;
+     #  estaOcupado: boolean;
+     #  fechaUltimoRegistro: String;
+     #  fechaUltimaDevolucion: String;
+     +  vehiculoEstaOcupado()
+     +  reservarVehiculo()
+     +  devolverVehiculo()
+     +  obtenerId()
+     +  currentDate()
      #  {abstract} costoActual()
 }
 
 class Automovil{
-     - String ID_AUT
-     - int COSTO_DIA
-     + automovil()
+     - COSTO_DIA: int
+     + Automovil(id: String)
 }
 
 class Bicicleta{
-     - String ID_BIC
-     - int COSTO_HORA
-     + bicicleta()
+     - COSTO_HORA: int
+     + Bicicleta(id: String))
 }
 
 class Motocicleta{
-     - String ID_MOTO
-     - int COSTO_DIA
-     + Motocicleta()
+     - COSTO_DIA: int
+     + Motocicleta(id: String))
 }
 
 @enduml
