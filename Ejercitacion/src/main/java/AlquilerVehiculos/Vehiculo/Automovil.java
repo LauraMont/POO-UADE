@@ -5,8 +5,8 @@ import java.util.Calendar;
 
 public class Automovil extends Vehiculo{
     private int COSTO_DIA;
-    public Automovil(String id){
-        this.id = "AUT" + id;
+    public Automovil(){
+        this.id = "AUT" + this.nroId();
         COSTO_DIA = 15;
         this.estaOcupado = false;
         this.fechaUltimoRegistro = "";

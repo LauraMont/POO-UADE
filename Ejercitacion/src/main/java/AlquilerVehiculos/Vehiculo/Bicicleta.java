@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class Bicicleta extends Vehiculo{
     private int COSTO_HORA;
-    public Bicicleta(String id){
+    public Bicicleta(){
         COSTO_HORA = 15;
-        this.id = "BIC" + id;
+        this.id = "BIC" + this.nroId();
         this.estaOcupado = false;
         this.fechaUltimoRegistro = "";
         this.fechaUltimaDevolucion = "";

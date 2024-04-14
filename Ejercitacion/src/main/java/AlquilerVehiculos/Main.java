@@ -1,4 +1,4 @@
-package Clase3;
+package AlquilerVehiculos;
 
 import GestorAlquiler.GestorAlquiler;
 

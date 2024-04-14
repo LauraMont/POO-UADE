@@ -13,38 +13,28 @@ import java.util.Random;
 public class GestorAlquiler {
     private List<Vehiculo> vehiculos;
     private List<Cliente> clientes;
-    public GestorAlquiler(int Bicicletas, int Motocicletas, int Automovil){
+    public GestorAlquiler(int cantBicicletas, int cantMotocicletas, int cantAutomoviles){
         vehiculos = new ArrayList<Vehiculo>();
         clientes = new ArrayList<Cliente>();
-        for (int i=0; Bicicletas>0; Bicicletas--) vehiculos.add(new Bicicleta(nroId()));
-        for (int i=0; Motocicletas>0; Motocicletas--) vehiculos.add(new Motocicleta(nroId()));
-        for (int i=0; Automovil>0; Automovil--) vehiculos.add(new Automovil(nroId()));
+        for (int i=0; cantBicicletas>0; cantBicicletas--) vehiculos.add(new Bicicleta());
+        for (int i=0; cantMotocicletas>0; cantMotocicletas--) vehiculos.add(new Motocicleta());
+        for (int i=0; cantAutomoviles>0; cantAutomoviles--) vehiculos.add(new Automovil());
     }
-    public GestorAlquiler(){
+    public GestorAlquiler() {
         vehiculos = new ArrayList<Vehiculo>();
         clientes = new ArrayList<Cliente>();
-    }
-    private String nroId() {
-        Random random = new Random();
-        int nro = random.nextInt(999998)+1; //Obtenemos un numero con 5 digitos
-        String id = String.valueOf(nro);
-        while(id.length()<6){
-            System.out.println(id);
-            id = '0'+id;
-        }
-        return id;
     }
     public void agregarBicicletas(int cantidad){
-        for (int i=0; cantidad<0; cantidad--) vehiculos.add(new Bicicleta(nroId()));
+        for (int i=0; cantidad<0; cantidad--) vehiculos.add(new Bicicleta());
     }
     public void agregarMotocicletas(int cantidad){
-        for (int i=0; cantidad<0; cantidad--) vehiculos.add(new Motocicleta(nroId()));
+        for (int i=0; cantidad<0; cantidad--) vehiculos.add(new Motocicleta());
     }
     public void agregarAutomovil(int cantidad){
-        for (int i=0; cantidad<0; cantidad--) vehiculos.add(new Automovil(nroId()));
+        for (int i=0; cantidad<0; cantidad--) vehiculos.add(new Automovil());
     }
     public boolean agregarCliente(long dni, String direccion, String nombre){
-        return clientes.add(new Cliente(dni,direccion,nombre,Integer.parseInt(nroId())));
+        return clientes.add(new Cliente(dni,direccion,nombre));
     }
     public boolean alquilarBicicletas(int idCliente) throws Exception {
         //buscar si hay una bicicleta disponible -> 1- Obtener listado de bicicletas -> 2 - obtener listado de bicicletas disponibles
@@ -60,7 +50,7 @@ public class GestorAlquiler {
     }
     public boolean alquilarAutomovil(){
         //buscar si hay una automoviles disponible -> 1- Obtener listado de automoviles -> 2 - obtener listado de automoviles disponibles
-        List<Vehiculo> automoviles = vehiculos.stream().filter(vehiculo -> vehiculo.obtenerId().startsWith("AUT") && !vehiculo.vehiculoEstaOcupado()).toList();
+        List<Vehiculo> automoviles = vehiculos.stream().filter(vehiculo -> (vehiculo instanceof Bicicleta) && (!vehiculo.vehiculoEstaOcupado())).toList();
         if (!automoviles.isEmpty()){ automoviles.getFirst().reservarVehiculo();}
         return !automoviles.isEmpty();
     }
