@@ -1,13 +1,15 @@
-package Vehiculo;
+package AlquilerVehiculos.Vehiculo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Automovil extends Vehiculo{
     private int COSTO_DIA;
+
     public Automovil(){
-        this.id = "AUT" + this.nroId();
+        this.id = "AUT" + ++cantAutomoviles;
         COSTO_DIA = 15;
+        this.tipo = TipoVehiculo.AUTOMIVIL;
         this.estaOcupado = false;
         this.fechaUltimoRegistro = "";
         this.fechaUltimaDevolucion = "";

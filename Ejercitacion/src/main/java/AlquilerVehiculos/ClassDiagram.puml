@@ -1,0 +1,100 @@
+Desarrollar como cada vehiculo va a calcular el costo (necesitamos una funcion para calcular el periodo de tiempo?)
+@startuml
+
+abstract        Vehiculo
+class           Cliente
+class           Automovil
+class           Bicicleta
+class           Motocicleta
+class           GestorAlquiler
+enum            tipoVehiculo
+
+Vehiculo  <|-- Bicicleta
+Vehiculo <|-- Automovil
+Vehiculo <|-- Motocicleta
+GestorAlquiler "1" *-- "many " Cliente :> contiene
+GestorAlquiler "1" *--"many " Vehiculo :> contiene
+Cliente "1   " o-- "many" Vehiculo :> reserva
+Vehiculo -- tipoVehiculo
+
+enum tipoVehiculo{
+    BICICLETA
+    AUTOMOVIL
+    MOTOCICLETA
+}
+
+class Cliente{
+     {static} contClientes: int
+     - nroCliente: int
+     - dni: String
+     - direccion: String
+     - nombre: String
+     - vehiculos : List<Vehiculo>
+     ..
+     + Cliente(long:dni, String:direccion, String:nombre)
+     ..
+     + String: obtenerId(String : dni)
+     ..
+     + void: reservarVehiculo(vehiculo: Vehiculo)
+     + void: devolverVehiculo(idVehiculo: String)
+}
+
+class GestorAlquiler{
+    - vehiculos: List<Vehiculo>
+    - clientes: List<Cliente>
+    ..
+    + GestorAlquiler(int:Bicicletas, int: Motocicletas, int: Automovil)
+    + GestorAlquiler()
+    ..
+    + void: agregarBicicletas(int cantidad)
+    + void: agregarMotocicletas(int cantidad)
+    + void: agregarAutomovil(int cantidad)
+    + void: agregarCliente(long:dni, String:direccion, String:nombre)
+    ..
+    + boolean: alquilarBicicleta(int: idCliente)
+    + boolean: alquilarMotocicleta(int: idCliente)
+    + boolean: alquilarAutomovil(int: idCliente)
+    ..
+    + boolean: devolucionVehiculo(int: idVehiculo, int: idCliente)
+    ..
+    + List<String>: listadoDeVehiculos()
+    + List<String>: listadoDeClientes()
+}
+
+abstract Vehiculo{
+     {static} contVehiculos: int
+     #  id: String;
+     #  estaOcupado: boolean;
+     #  fechaUltimoRegistro: String;
+     #  fechaUltimaDevolucion: String;
+     #  tipo: tipoVehiculo
+     ..
+     +  boolean: vehiculoEstaOcupado()
+     ..
+     +  reservarVehiculo()
+     +  devolverVehiculo()
+     ..
+     +  String: obtenerId()
+     +  tipoVehiculo: obtenerTipoVehiculo()
+     ..
+     +  String: currentDate()
+     #  {abstract} double: costoActual(fechaInicio: String, fechaFinal: String)
+
+}
+
+class Automovil{
+     - COSTO_DIA: int
+     + Automovil()
+}
+
+class Bicicleta{
+     - COSTO_HORA: int
+     + Bicicleta()
+}
+
+class Motocicleta{
+     - COSTO_DIA: int
+     + Motocicleta()
+}
+
+@enduml

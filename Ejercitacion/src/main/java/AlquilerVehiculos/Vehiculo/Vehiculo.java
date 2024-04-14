@@ -1,4 +1,4 @@
-package Vehiculo;
+package AlquilerVehiculos.Vehiculo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,16 +11,8 @@ public abstract class Vehiculo {
      protected boolean estaOcupado;
      protected String fechaUltimoRegistro ;
      protected String fechaUltimaDevolucion;
-     protected String nroId() {
-          Random random = new Random();
-          int nro = random.nextInt(999998)+1; //Obtenemos un numero con 5 digitos
-          String id = String.valueOf(nro);
-          while(id.length()<6){
-               System.out.println(id);
-               id = '0'+id;
-          }
-          return id;
-     }
+     protected TipoVehiculo tipo;
+     static int cantAutomoviles = 0;
      public boolean vehiculoEstaOcupado(){
           return this.estaOcupado;
      }
@@ -28,7 +20,7 @@ public abstract class Vehiculo {
           return this.id;
      }
      public String obtenerDatos(){
-          return "\nid:"+this.id+" | Vehiculo ocupado :"+this.estaOcupado+"\n";
+          return "id:"+this.id+" | Vehiculo ocupado :"+this.estaOcupado;
      }
      public static String currentDate(){
           // formato de fecha: YYYY.MM.DD-HH.MM.SS
@@ -39,8 +31,11 @@ public abstract class Vehiculo {
           this.fechaUltimoRegistro= currentDate();
      }
      public void devolverVehiculo(){
-          this.estaOcupado = true;
-          this.fechaUltimoRegistro= currentDate();
+          this.estaOcupado = false;
+          this.fechaUltimaDevolucion= currentDate();
+     }
+     public TipoVehiculo obtenerTipoVehiculo(){
+          return tipo;
      }
      public abstract double costoActual();
 }

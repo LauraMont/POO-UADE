@@ -1,14 +1,11 @@
-package GestorAlquiler;
+package AlquilerVehiculos.GestorAlquiler;
 
-import Vehiculo.Vehiculo;
-import Vehiculo.Bicicleta;
-import Vehiculo.Motocicleta;
-import Vehiculo.Automovil;
+import AlquilerVehiculos.Vehiculo.*;
+import AlquilerVehiculos.Vehiculo.Vehiculo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 public class GestorAlquiler {
     private List<Vehiculo> vehiculos;
@@ -36,29 +33,41 @@ public class GestorAlquiler {
     public boolean agregarCliente(long dni, String direccion, String nombre){
         return clientes.add(new Cliente(dni,direccion,nombre));
     }
-    public boolean alquilarBicicletas(int idCliente) throws Exception {
+    public boolean alquilarBicicleta(int idCliente){
         //buscar si hay una bicicleta disponible -> 1- Obtener listado de bicicletas -> 2 - obtener listado de bicicletas disponibles
-        List<Vehiculo> bicicletas = vehiculos.stream().filter(vehiculo -> vehiculo.obtenerId().startsWith("BIC") && !vehiculo.vehiculoEstaOcupado()).toList();
-        if (!bicicletas.isEmpty()){ bicicletas.getFirst().reservarVehiculo();}
+        List<Vehiculo> bicicletas = vehiculos.stream().filter(vehiculo -> (vehiculo.obtenerTipoVehiculo()==TipoVehiculo.BICICLETA) && (!vehiculo.vehiculoEstaOcupado())).toList();
+        if (!bicicletas.isEmpty()){
+            clientes.get(idCliente-1).reservarVehiculo(bicicletas.getFirst());
+            bicicletas.getFirst().reservarVehiculo();
+        }
         return !bicicletas.isEmpty();
     }
-    public boolean alquilarMotocicletas(){
+    public boolean alquilarMotocicleta(int idCliente){
         //buscar si hay una bicicleta motocicletas -> 1- Obtener listado de motocicletas -> 2 - obtener listado de motocicletas disponibles
-        List<Vehiculo> motocicletas = vehiculos.stream().filter(vehiculo -> vehiculo.obtenerId().startsWith("MOT") && !vehiculo.vehiculoEstaOcupado()).toList();
-        if (!motocicletas.isEmpty()){ motocicletas.getFirst().reservarVehiculo();}
+        List<Vehiculo> motocicletas = vehiculos.stream().filter(vehiculo -> (vehiculo.obtenerTipoVehiculo()==TipoVehiculo.MOTOCICLETA) && (!vehiculo.vehiculoEstaOcupado())).toList();
+        if (!motocicletas.isEmpty()){
+            clientes.get(idCliente-1).reservarVehiculo(motocicletas.getFirst());
+            motocicletas.getFirst().reservarVehiculo();
+        }
         return !motocicletas.isEmpty();
     }
-    public boolean alquilarAutomovil(){
+    public boolean alquilarAutomovil(int idCliente){
         //buscar si hay una automoviles disponible -> 1- Obtener listado de automoviles -> 2 - obtener listado de automoviles disponibles
-        List<Vehiculo> automoviles = vehiculos.stream().filter(vehiculo -> (vehiculo instanceof Bicicleta) && (!vehiculo.vehiculoEstaOcupado())).toList();
-        if (!automoviles.isEmpty()){ automoviles.getFirst().reservarVehiculo();}
+        List<Vehiculo> automoviles = vehiculos.stream().filter(vehiculo -> (vehiculo.obtenerTipoVehiculo()==TipoVehiculo.AUTOMIVIL) && (!vehiculo.vehiculoEstaOcupado())).toList();
+        if (!automoviles.isEmpty()){
+            clientes.get(idCliente-1).reservarVehiculo(automoviles.getFirst());
+            automoviles.getFirst().reservarVehiculo();
+        }
         return !automoviles.isEmpty();
     }
     public boolean devolucionVehiculo(String idVehiculo, int idCliente){
         //buscar automovil en listado
         List<Vehiculo> vehiculo = vehiculos.stream().filter(el -> Objects.equals(el.obtenerId(), idVehiculo)).toList();
         //si existe la lista no esta vacia y siempre tendra como primer elemento el vehiculo deseado
-        if (!vehiculo.isEmpty()){ vehiculo.getFirst().devolverVehiculo();}
+        if (!vehiculo.isEmpty()){
+            clientes.get(idCliente-1).devolverVehiculo(idVehiculo);
+            vehiculo.getFirst().devolverVehiculo();
+        }
         //Si el vehiculo no existe se devolvera falso ya que no se pudo encontrar siendo que la lista esta vacia
         return !vehiculo.isEmpty();
     }

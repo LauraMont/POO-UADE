@@ -1,4 +1,4 @@
-package Vehiculo;
+package AlquilerVehiculos.Vehiculo;
 
 import java.util.Random;
 
@@ -6,7 +6,8 @@ public class Bicicleta extends Vehiculo{
     private int COSTO_HORA;
     public Bicicleta(){
         COSTO_HORA = 15;
-        this.id = "BIC" + this.nroId();
+        this.tipo = TipoVehiculo.BICICLETA;
+        this.id = "BIC" + ++cantAutomoviles;
         this.estaOcupado = false;
         this.fechaUltimoRegistro = "";
         this.fechaUltimaDevolucion = "";

@@ -1,2 +1,7 @@
-package AlquilerVehiculos.Vehiculo;public enum TipoVehiculo {
+package AlquilerVehiculos.Vehiculo;
+
+public enum TipoVehiculo {
+    AUTOMIVIL,
+    BICICLETA,
+    MOTOCICLETA
 }
