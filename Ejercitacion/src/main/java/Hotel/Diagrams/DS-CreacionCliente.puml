@@ -1,0 +1,7 @@
+@startuml
+autoactivate on
+GestorHotel -> ClienteA: agregarCliente(nombre)
+autoactivate on
+ClienteA -> ClienteA: Cliente()
+ClienteA -->GestorHotel: referencia de ClienteA
+@enduml

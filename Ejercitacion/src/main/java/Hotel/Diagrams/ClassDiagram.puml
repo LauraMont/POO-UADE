@@ -1,0 +1,134 @@
+@startuml
+GestorHotel "1" -left- "1" Hotel
+GestorHotel "1" *-- "Many" Reserva :> contiene
+GestorHotel "1" *-- "Many" Cliente
+Hotel "1" *-- "Many" Habitacion:> contiene
+Cliente "1" -- "Many" Habitacion
+Cliente "1" o-right- "Many" Reserva :> realiza
+Cliente -- TipoCliente
+Reserva "1" o-- "1" Cliente
+Reserva "1" o-- "1" Habitacion :> ocupa
+Reserva -- EstadoReserva
+Habitacion -- EstadoHabitacion
+
+class GestorHotel{
+    - reservas: List<Reserva>
+    - clientes: List<Cliente>
+    --
+    + descuentosCliente(clientId): double
+    + costoReserva(reservaId: int)): double
+    + calcularImporteTotalReserva(reservaId): double
+    ..
+    + agregarCliente(nombre: String): void
+    ..
+    + agregarReservaSimple(clientID: int, fecha:String, senia: double, dias:int):void
+    + agregarReservaDoble(clientID: int, fecha:String, senia: double, dias:int):void
+    + agregarReservaMatrimonial(clientID: String, fecha:String, senia: double, dias:int):void
+    ..
+    + seniarReserva(reservaId: int) :void
+    + reservaTomada(reservaId: int) :void
+    + liberarReserva(reservaId: int) :void
+    + reservaVencida(reservaId: int) :void
+    - reservaCancelada(reservaId: int) :void
+    ..
+    + getPrecioSimple(): precio:double
+    + getPrecioDoble(): precio:double
+    + getPrecioMatrimonial(): precio:double
+    ..
+    + getHabitacionSimpleDistonibles(fecha: String): List<Habitacion>
+    + getHabitacionDobleDistonibles(fecha: String): List<Habitacion>
+    + getHabitacionMatrimonialDistonibles(fecha: String) List<Habitacion>
+}
+
+class   Hotel{
+    - hotel: Hotel
+    - habitacionesSimple : List<Habitacion>
+    - habitacionesDoble : List<Habitacion>
+    - habitacionesMatrimonial : List<Habitacion>
+    --
+    - Hotel()
+    + {static} getInstancia(): Hotel
+    ..
+    + getHabitacionSimpleDistonibles(fecha: String): List<Habitacion>
+    + getHabitacionDobleDistoniblesfecha: String): List<Habitacion>
+    + getHabitacionMatrimonialDistonibles(fecha: String): List<Habitacion>
+}
+class  Habitacion{
+     # numero: String
+     # piso: String
+     # precioBase: double
+     # estado: EstadoHabitacion
+     --
+     + isSimple():boolean
+     + isDoble():boolean
+     + isMatromonial():boolean
+     ..
+     # reservar(): void
+     # ocupar() : void
+     # habilitar(): void
+ }
+class Simple extends Habitacion{
+     + {static} getPrecio(): double
+     + isSimple():boolean
+}
+class Doble extends Habitacion{
+     + {static} getPrecio(): double
+     + isDoble():boolean
+}
+class Matromonial extends Habitacion{
+     + {static} getPrecio(): double
+     + isMatromonial():boolean
+}
+class   Cliente{
+    - {static} cantClientes: int
+    - nombre: String
+    - estado: TipoCliente
+    - id : String
+    - misReservas: List<Reserva>
+    + Cliente(nombre: String)
+    + esHabitual(): boolean
+    - calcularEstado(): void
+    + agregarReserva():void
+}
+class   Reserva{
+    - {static} cantReservas: int
+    - ReservaId: int
+    - cliente: Cliente
+    - habitacion : Habitacion
+    - fechaComienzo: String
+    - diasReserva: int
+    - importeTotal: double
+    - senia: double
+    - estado: EstadoReserva
+    --
+    + Reserva()
+    ..
+    + getReservaId(): int
+    + getimporteTotal(): double
+    ..
+    + seniar() :void
+    + tomada() :void
+    + liberar() :void
+    + cancelada() :void
+    + vencida() :void
+}
+
+enum TipoCliente{
+    HABITUAL
+    ESPORADICO
+}
+
+enum EstadoReserva{
+    SEÑADA
+    ACTIVA
+    TOMADA
+    VENCIDA
+    CANCELADA
+}
+
+enum EstadoHabitacion{
+    RESERVADA
+    DISPONIBLE
+    OCUPADA
+}
+@enduml
