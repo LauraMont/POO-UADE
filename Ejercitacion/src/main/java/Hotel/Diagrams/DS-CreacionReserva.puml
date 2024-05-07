@@ -1,11 +1,21 @@
 @startuml
-autoactivate on
-GestorHotel -> GestorHotel: agregarReservaSimple(...datos)
+actor       Main
+participant GestorHotel
+participant Hotel
+participant ReservaA
+participant ClienteA
+participant HabitacionA
+
+Main -> GestorHotel: agregarReservaSimple(...datos)
+activate GestorHotel
 GestorHotel -> Hotel : getHabitacionSimpleDistonibles(fecha)
+activate Hotel
 Hotel--> GestorHotel : lista habitaciones
 GestorHotel -> ReservaA: <<create>>
+activate ReservaA
 ReservaA -> ReservaA:Reserva(habitacion, cliente)
 ReservaA -> ClienteA: agregarReserva(ReservaA)
+activate ClienteA
 ClienteA -> ClienteA: calcularEstado()
 alt es habitual
 ClienteA -> ClienteA: setEstadoHabitual
@@ -13,5 +23,7 @@ else no es habitual
 ClienteA -> ClienteA: setEstadoEsporadico
 end
 ReservaA -> HabitacionA: reservar()
+activate HabitacionA
+HabitacionA -> HabitacionA : cambiarEstadoReservada()
 ReservaA --> GestorHotel : referencia a ReservaA
 @enduml

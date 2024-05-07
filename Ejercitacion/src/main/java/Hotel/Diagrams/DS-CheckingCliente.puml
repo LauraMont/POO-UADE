@@ -1,7 +1,34 @@
 @startuml
-autoactivate on
-GestorHotel -> ClienteA: agregarCliente(nombre)
-autoactivate on
-ClienteA -> ClienteA: Cliente()
-ClienteA -->GestorHotel: referencia de ClienteA
+actor       Main       as main
+participant gestorHotel as gestor
+participant reservaA as reserva
+participant habitacionA as habitacion
+
+main -> gestor :reservaTomada(reservaId)
+activate gestor
+loop Buscar reserva
+    gestor -> reserva: getReservaId()
+    reserva --> gestor: reservaId
+    gestor -> gestor: comparaIDReservas
+end
+alt no encuentra reserva
+    gestor --> gestor :Error("Reserva no existe"))
+else encuentra reserva
+    gestor->gestor: buscarReserva
+    gestor -> reserva: tomada()
+    activate reserva
+    reserva -> reserva: esReservaValida()
+    alt reserva no esta vencida o cancelada
+        reserva -> reserva: cambiaEstadoOcupada()
+        reserva -> habitacion:ocupar()
+        activate habitacion
+        habitacion -> habitacion: cambiaEstadoOcupada()
+        reserva --> gestor : true
+    else reserva esta vencida o cancelada
+        reserva --> gestor : false
+        gestor --> gestor :Error("Reserva esta vencida o cancelada"))
+    end
+end
+
+
 @enduml

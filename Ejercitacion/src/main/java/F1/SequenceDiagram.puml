@@ -1,0 +1,22 @@
+@startuml
+Competencia1 -> Circuito1: Competencia()
+Competencia1 -> Circuito1: obtenerCantidadVueltas()
+return cantidadVueltas
+Competencia1 -> Circuito1: obtenerAnfitrion()
+return anfitrion
+Competencia1 -> ferrari1: Competencia()
+activate ferrari1
+ferrari1 -> Piloto1: Vehiculo()
+Competencia1 -> Vehiculo2: Competencia()
+activate Vehiculo2
+Vehiculo2 -> Piloto2: Vehiculo()
+Competencia1 -> Competencia1: iniciarCompetencia()
+Competencia1 -> Competencia1 : actualizarEstadoCarrera()
+alt vehiculo1 tiene igual cantidad de vueltas que vehiculo2
+    alt vehiculo con diferente escuderia
+        Vehiculo1 -> Vehiculo2: intentarSobrepasar()
+    end
+end
+
+
+@enduml

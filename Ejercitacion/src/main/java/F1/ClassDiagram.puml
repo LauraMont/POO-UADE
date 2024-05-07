@@ -1,0 +1,68 @@
+@startuml
+
+class Competencia {
+  - circuito: Circuito
+  - vehiculos: List<Vehiculo>
+  + Competencia()
+  + iniciarCompetencia(): void
+  + determinarGanador(): boolean
+  + actualizarEstadoCarrera(): void
+  + obtenerPosiciones(): void
+}
+
+class Circuito {
+  - nombre: string
+  - vueltasTotales: int
+  - anfitrion: string
+  + obtenerVueltas(): int
+  + obtenerAnfitrion(): string
+}
+
+abstract class Vehiculo {
+  - posicion: int
+  - capacidadCombustible: int
+  - cantidadCombustible: float
+  - piloto: Piloto
+  - vueltasActuales: int
+  + Vehiculo(paisAnfitrion: String)
+  {abstract} intentarSobrepasar(vehiculo: Vehiculo): void
+  # sobrepasarFerrari(vehiculo: Ferrari): void
+  # sobrepasarMercedes(vehiculo: Mercedes): void
+  # sobrepasarWilliams(vehiculo: Williams): void
+  + calcularVelocidadFinal(): int
+  + actualizarCombustibleYVueltas(): void
+  # esFerrari(): boolean
+  # esWilliams(): boolean
+  # esMercedes(): boolean
+}
+
+class Ferrari extends Vehiculo {
+  + calcularVelocidadFinal(): int
+  + sobrepasarFerrari(vehiculo: Ferrari): void
+  + esFerrari(): boolean
+}
+
+class Williams extends Vehiculo {
+  + calcularVelocidadFinal(): int
+  + esWilliams(): boolean
+  + sobrepasarWilliams(vehiculo: Williams): void
+}
+
+class Mercedes extends Vehiculo {
+  + calcularVelocidadFinal(): int
+  + esMercedes(): boolean
+  + sobrepasarMercedes(vehiculo: Mercedes): void
+}
+
+class Piloto {
+  - nombreCompleto: string
+  - nacionalidad: string
+  - nivel: int
+  + incrementarNivel(anfitrion: String): void
+}
+
+Competencia "1" *-down- "1" Circuito : realizada en
+Competencia "1" *-down- "n" Vehiculo : compiten
+Circuito "1" o-right- "n" Vehiculo : compiten
+Vehiculo "1" *-right- "1" Piloto : manejado por
+@enduml
