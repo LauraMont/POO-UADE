@@ -2,13 +2,13 @@
 
 Instituto "1" *-- "Many" Carrera :> ofrece
 Carrera "Many" o-- "Many" Materia:> consiste
-Carrera *-- Curso :> se enseña con
-Instituto *-- Alumno :> ofrece educacion
-Instituto *-- Profesor :> contrata
-Curso o-- Profesor :< imparte
-Curso o-- Alumno :< asiste a
-Materia o-- Profesor :< dicta
-Alumno o-- Carrera :> estudia
+Carrera  "1" *-- "Many" Curso :> se enseña con
+Instituto  "1" *-- "Many" Alumno :> ofrece educacion
+Instituto  "1" *-- "Many" Profesor :> contrata
+Curso  "Many" o--  "1" Profesor :< imparte
+Curso"Many" o--"Many" Alumno :< asiste a
+Materia "Many" o-- "Many" Profesor :< dicta
+Alumno  "Many" o--  "1" Carrera :> estudia
 
 Curso -- TurnoCurso
 Curso -- DiaSemana
