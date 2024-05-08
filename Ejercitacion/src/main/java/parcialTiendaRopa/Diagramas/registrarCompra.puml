@@ -1,0 +1,46 @@
+@startuml
+actor Main as main
+participant GestorTiendasDeRopa as gestor
+participant TiendaRopa as tienda
+participant Cliente as cliente
+participant OrdenCompra as orden
+
+main -> gestor :RegistrarOrden(idRopa, idCliente, metodoPago)
+activate gestor
+gestor -> gestor: GetCliente
+loop buscar cliente
+    gestor -> cliente : getIdCliente()
+    alt hay coincidencia
+    gestor -> cliente: puedeComprar(prendas)
+    activate cliente
+    loop verificar ordenes de cliente
+        cliente -> orden : estaPendiente()
+        cliente -> orden : prendasEnOrden(prendas)
+        activate orden
+        orden -> orden: verificarPrendas()
+        orden --> cliente: esta o no en listado
+        destroy orden
+        alt hay mas de dos pendientes
+            cliente -> gestor : Error("Cliente tiene 2 ordenes pendientes, no es posible el realiza el pedido")
+        end
+        alt una prenda es parte de la orden
+            cliente -> gestor : Error("Cliente ya tiene una prenda en otra orden. No es posible realizar pedido")
+        end
+        destroy cliente
+    end
+end
+
+end
+alt encontro cliente & este puede realizar registro de puedeCompra
+    gestor -> tienda : obtenerPrenda(idRopa)
+    tienda -> tienda : BuscaRopa(ropa)
+    tienda --> gestor : ropa
+    gestor -> orden: new Orden(cliente, orden)
+    orden -> cliente : agregarNuevaOrden(orden)
+
+else no encontro cliente
+    gestor -> main: Error("No se encontro cliente en el sistema")
+end
+
+
+@enduml

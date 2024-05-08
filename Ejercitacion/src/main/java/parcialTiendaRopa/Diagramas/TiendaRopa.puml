@@ -1,0 +1,117 @@
+@startuml
+GestorTiendasDeRopa "1" *-- "1" TiendaRopa :> abarca
+GestorTiendasDeRopa "1" *-- "Many" OrdenCompra:> registra con
+GestorTiendasDeRopa "1" *-- "Many "Cliente :> ofrece servicio
+TiendaRopa "1" *-- "Many" Prenda :> vende
+Prenda "Many" o-- "1" Marca:> pertenece
+OrdenCompra "1" o-- "1" Cliente :< titular
+OrdenCompra "1" o-- Prenda:> registra venta
+
+Prenda -- Publico
+Prenda -- Categoria
+OrdenCompra -- EstadoOrden
+OrdenCompra -- MetodosPago
+
+class GestorTiendasDeRopa{
+    - ordenCompraOnline: List<OrdenCompra>
+    - tienda: TiendaRopa
+    - clientes: List<Cliente>
+    - marcas : List<Marca>
+    + GestorTiendasDePrenda()
+    + crearCliente(nombre:String): void
+    + pagarOrden(idCliente: String, idOrden): void
+    + RegistrarOrden(idTienda, idCliente: String, idPrenda: String): void
+    + devolucionOrden (ordenId): void
+    ..
+    + getMarcas(): List<String>
+    + getCategorias(): List<String>
+    + getMarcas(): List<String>
+    + getTiendas(): List<String>
+    + getCliente(): Cliente
+}
+class OrdenCompra{
+    - cliente: Cliente
+    - items: List<Prenda>
+    - monto: double
+    - estado: EstadoOrden
+    - metodoPago: MetodosPago
+    - fechaCreacion: String
+    - fechaLiquidacion: String
+    + OrdenCompra(idCliente: String, items: List<Prenda>)
+    + pagarOrden(metodo: MetodosPago): void
+    + estaPendiente(): boolean
+    + getItems(): List<Prenda>
+    + devolucionOrden(): void
+    + prendasEnOrden(prendas)
+}
+
+class TiendaRopa{
+    - prendasDeVestir : List<Prenda>
+    + TiendaPrenda()
+    + getPrendaPorCategoria(): List<Prenda>
+    + getPrendaPorMarca(): List<String>
+    + getPrendaPorColor(): List<String>
+    + getPrendaPorPrecio(): List<String>
+    + getPrendaPorTalle(): List<String>
+    + getVentasDiarias(): List<String>
+    + getVentasSemanales(): List<String>
+    + getVentasMensuales(): List<String>
+}
+class Prenda{
+    - id : String
+    - categoria : Categoria
+    - marca: Marca
+    - talle: String
+    - colorPrenda: String
+    - precio: int
+    - añoColleccion: int
+    --
+    + Prenda(categoria: Categoria, marca: Marca, talle:String, color: String, precio. int)
+    + getTalle(): String
+    + getPrecio(): double
+    + getColor(): String
+    + getMarca(): Marca
+    + getCategoria(): Categoria
+    + getAñoColleccion(): int
+    + getInfoPrenda(): String
+}
+class Marca{
+    - cantFormal: int
+    - cantCasual: int
+    - cantDeportiva: int
+    - nombre : String
+    + Marca()
+    + gerInfoMarca(): String
+}
+class Cliente{
+    - {static} cantClientes: int
+    - nombre:String
+    - ordenes: List<OrdenCompra>
+    + Cliente()
+    + puedeComprar(List<Prenda>): boolean
+    + agregarNuevaOrden(orden: OrdenCompra)
+}
+
+enum Categoria{
+    CASUAL
+    DEPORTIVA
+    FORMAL
+}
+enum Publico{
+    HOMBRE
+    MUJER
+    INFANTE
+}
+enum EstadoOrden{
+    PENDIENTE
+    PAGADA
+    CANCELADA
+    DEVOLUCION
+}
+enum MetodosPago{
+    TARJETA
+    EFECTIVO
+    TRANSFERENCIA
+}
+
+@enduml
