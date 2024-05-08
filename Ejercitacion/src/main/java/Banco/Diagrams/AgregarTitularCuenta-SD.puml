@@ -1,0 +1,30 @@
+@startuml
+actor Main as main
+participant Banco as banco
+participant cuentaA as cuenta
+participant clientA as cliente
+
+main -> banco : agregarTitularCuenta(idCliente, idCuenta)
+activate banco
+loop busqueda de cuenta
+    banco -> cuenta : getIdCuenta()
+    cuenta --> banco : id cuenta
+end
+alt existe cuenta
+    loop busqueda de cliente
+        banco -> cliente : getIdCliente()
+        cliente --> banco : id cliente
+        alt id cliente es igual a id recibido
+            banco -> cliente : estaActivo()
+        end
+    end
+    alt encontro cliente & esta activo
+        banco -> cliente : agregarCuenta(cuenta)
+        cliente -> cliente : agregaCuenta()
+    else no encontro cliente
+        banco --> main: Error("No existe la cliente en el sistema")
+    end
+    else no encontro cuenta
+        banco --> main: Error("No existe la cuenta en el sistema")
+end
+@enduml

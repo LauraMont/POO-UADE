@@ -1,0 +1,19 @@
+@startuml
+actor Main as main
+participant GestorTiendasDeRopa as gestor
+participant TiendaRopa as tienda
+participant Cliente as cliente
+participant Ropa as ropa
+
+main -> gestor : obtenerPrecioFinal(idOrden)
+gestor -> gestor : buscar orden
+alt encontro orden
+    gestor->orden : calcularPrecioFinal()
+    orden -> ropa : getAñoColeccion()
+    orden -> orden : calcularPrecioFinal
+    orden --> gestor : precio final
+    gestor --> main : precio final
+else no encontro orden
+ gestor -> main : Error("No encontro orden")
+end
+@enduml

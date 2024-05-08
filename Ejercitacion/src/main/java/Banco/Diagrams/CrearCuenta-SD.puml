@@ -1,0 +1,49 @@
+@startuml
+actor Main as main
+participant Banco as banco
+participant clienteA as cliente
+participant cuentaCorrienteA as cc
+participant cuentaAhorroA as ca
+
+alt agrega cuenta corriente
+    main -> banco: agregarCuentaCC(idCliente,Moneda)
+    activate banco
+    loop busca cliente
+        banco -> cliente : getIdCliente()
+        cliente --> banco : clientId
+        alt id cliente igual id recibido
+            banco -> cliente :getEstadoCliente()
+        end
+    end
+    alt encuentra cliente & cliente esta activo
+        banco -> cc : <create>
+        cc --> banco : ccA
+        banco -> cliente : agregarCuenta(ccA)
+        cliente -> cliente: AgregarCuenta()
+        banco -> banco: AgregarCuenta()
+    else
+        banco --> main: Error("Cliente no se encuentra en el sistema")
+end
+destroy banco
+
+else agrega caja ahorro
+    main -> banco: agregarCuentaCA(idCliente,Moneda)
+    activate banco
+    loop busca cliente
+        banco -> cliente : getIdCliente()
+        cliente --> banco : clientId
+        alt id cliente igual id recibido
+            banco -> cliente :getEstadoCliente()
+        end
+    end
+    alt encuentra cliente
+        banco -> ca : <create>
+        ca --> banco : caA
+        banco -> cliente : agregarCuenta(caA)
+        cliente -> cliente: AgregarCuenta()
+        banco -> banco: AgregarCuenta()
+    else
+        banco --> main: Error("Cliente no se encuentra en el sistema")
+    destroy banco
+end
+@enduml
