@@ -1,0 +1,72 @@
+//Inscripcion de alumno a curso
+@startuml
+actor Main as main
+participant institutoA as instituto
+participant carreraA as carrera
+participant alumnoA as alumno
+
+participant cursoA as curso
+
+main -> instituto : getCursos(codigoCarrera, codigoMateria)
+activate instituto
+
+loop buscar carrera
+    instituto -> carrera : getCodigo()
+    activate carrera
+    carrera --> instituto : codigoCarrera
+    destroy carrera
+end
+loop buscar alumno
+    instituto -> alumno : getLegajo()
+    activate alumno
+    alumno --> instituto : Legajo
+    destroy alumno
+end
+alt se encontro carrera y alumno
+    instituto -> carrera: getInfoCursos(codigoMateria)
+        activate carrera
+        loop obtener info de cursos de materia
+            carrera -> curso: hayCupo()
+            carrera -> curso: getCodigoMateria()
+        alt es curso de materia requerido y tiene cupo
+            carrera -> curso: getInfoCurso()
+            activate curso
+            curso -> carrera: info de curso
+            destroy curso
+        end
+        end
+    activate carrera
+    carrera --> instituto: lista info de cursos
+    destroy carrera
+    instituto --> main: lista info de cursos
+    destroy instituto
+
+    main -> instituto : agregarAlumnoACurso(legajo, codigoCurso)
+    activate instituto
+    instituto -> carrera: inscribirCurso(codigoCurso, alumno)
+    activate carrera
+    loop buscar curso
+        carrera -> curso : getLegajo()
+        activate curso
+        curso --> carrera : Legajo
+        destroy curso
+    end
+    carrera -> curso: incribirAlumno(alumno)
+    activate curso
+    curso -> alumno : agregarCurso(cursoA)
+    alt pudo agregar curso
+        curso -> curso : agregaAlumno()
+    else el alumno no tenia horario disponible
+        curso --> carrera: Error("Horario no disponible")
+        destroy curso
+    end
+    carrera --> instituto : curso --> carrera: Error("Horario no disponible")
+    destroy carrera
+    instituto --> main : Error("Horario no disponible")
+    destroy instituto
+else no se encontro carrera y/o alumno
+    instituto --> main : Error("Carrera o alumno no existen en el sistema")
+end
+
+
+@enduml

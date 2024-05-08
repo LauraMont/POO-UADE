@@ -1,0 +1,129 @@
+@startuml
+
+Instituto "1" *-- "Many" Carrera :> ofrece
+Carrera "Many" o-- "Many" Materia:> consiste
+Carrera *-- Curso :> se enseña con
+Instituto *-- Alumno :> ofrece educacion
+Instituto *-- Profesor :> contrata
+Curso o-- Profesor :< imparte
+Curso o-- Alumno :< asiste a
+Materia o-- Profesor :< dicta
+Alumno o-- Carrera :> estudia
+
+Curso -- TurnoCurso
+Curso -- DiaSemana
+Profesor -- TurnoCurso
+Profesor -- DiaSemana
+Alumno -- TurnoCurso
+Alumno -- DiaSemana
+Profesor -- TipoDocumento
+Alumno -- TipoDocumento
+Carrera -- EstadoCarrera
+
+class   Instituto{
+    - {static} cantCursos: int
+    - {static} cantMaterias: int
+    - {static} cantAcademicos: int
+    - carreras: List<Carrera>
+    - alumnos: List<Alumno>
+    - profesores: List<Profesor>
+    --
+    + inscribirAlumno(nombre:String, tipoDoc: TipoDocumento, nroDoc: String, codigoCarrera: String)
+    + agregarProfesor(nombre:String, tipoDoc: TipoDocumento, nroDoc: String, materias List<String>)
+    ..
+    + getCarreras(codigoCarrera: String): List<String>
+    + getCursos(codigoCarrera: String, codigoMateria: String): List<String>
+    + getListadoAlumnosProfesorCurso(codigoCarrera:String, codigoCurso: String)
+    + crearCurso(codigoMateria: String, codigoCarrera: String)
+    + agregarAlumnoACurso(legajo: String, codigoCurso: String)
+}
+class   Carrera{
+    - {static} cantCarreras: int
+    - codigo: String
+    - materias: List<Materia>
+    - cursos: List<Curso>
+    - estado: EstadoCarrera
+    - descripcion: String
+    --
+    + Carrera()
+    + cursosDisponibles(codigoMateria: String): List<cursos>
+    + inscribirCurso(codigoCurso: String, alumno:Alumno)
+    + crearCurso(codigoMateria: String): boolean
+    + estaActiva(): boolean
+    + getInfoCursos(): List<String>
+}
+class   Curso{
+    - codigo: String
+    - MAX_ALUMNOS: int
+    - dia: DiaSemana
+    - turno: turnoCurso
+    - docente: Profesor
+    - alumnos: List<Alumno>
+    - materia: Materia
+    --
+    + Curso()
+    + incribirAlumno(alumno: Alumno)
+    + hayCupo():boolean
+    ..
+    + getAlumnosCurso(): List<String>
+    + getProfesorCurso(): List<String>
+    + getInformacionCurso(): List<String>
+    + getInfoCurso(): String
+    + getCodigoMateria(): String
+    ..
+    + getDiaCurso(): DiaSemana
+    + getTurnoCurso(): turnoCurso
+}
+class   Materia{
+    - descripcion: String
+    - codigo: String
+    --
+    + Materia()
+    + getCodigo(): String
+    + getInfoMateria(): String
+}
+class   Alumno{
+    - legajo: String
+    - nombre: String
+    - nroDocumento: String
+    - tipoDocumento: TipoDocumento
+    - cursos : List<Curso>
+    - carrera : Carrera
+    --
+    + Alumno()
+    + getLegajo(): String
+    + agregarCurso(codigoMateria: String)
+    + getInfoAlumno(): String
+}
+class   Profesor{
+    - legajo: String
+    - nombre: String
+    - nroDocumento: String
+    - tipoDocumento: TipoDocumento
+    - materias : List<Materia>
+    --
+    + Profesor()
+    - puedeDictarCurso(curso:Curso):boolean
+    + getInfoProfesor(): String
+}
+enum EstadoCarrera{
+    ACTIVA
+    INACTIVA
+}
+enum DiaSemana{
+    LUNES
+    MARTES
+    MIERCOLES
+    JUEVES
+    VIERNES
+}
+enum TurnoCurso{
+    MAÑANA
+    TARDE
+    NOCHE
+}
+enum TipoDocumento{
+    DNI
+}
+
+@enduml
