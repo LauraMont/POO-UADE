@@ -1,0 +1,130 @@
+@startuml
+Banco "1" *-left- "Many" Cliente:> da servicio
+Banco "1" *-- "Many" Cuenta :> mantiene
+Banco "1" *-- "Many" Operacion:> registra
+Cliente "Many" o-- "Many" Cuenta:> es titular
+Operacion "1" o-- "1" Cliente:< titular
+Operacion "1" o-- "1" Cuenta:> sobre
+
+Cliente -- TipoEnvio
+Cliente -- EstadoCliente
+Operacion -- TipoOperacion
+Banco -- TipoOperacion
+Cuenta -- Moneda
+
+class Banco{
+    - operaciones: List<Operacion>
+    - clientes: List <Cliente>
+    - cuentas: List <Cuenta>
+    --
+    + Banco()
+    ..
+    + agregarCliente(doc:String, nombre:String, domicilio:String, tipoEnvio:TipoEnvio): void
+    + agregarDomPostal(domPostal: String): void
+    + agregarCC(idCliente: String, moneda: Moneda): void
+    + agregarCA(idCliente: String, moneda: Moneda): void
+    + agregarTitularCuenta(idCliente: String, idCuenta: String): void
+    ..
+    + getListaClientes(): List<String>
+    + getListaCuentas(idCliente: String)+
+    + getSaldoCuenta(idCliente: String, idCuenta: String)
+    + getInfoOperacion(idOperacion: String)
+    ..
+    + getMovimientosCuentaDia(): List<String>
+    + getMovimientosCuentaUltimoMes(): List<String>
+    + getMovimientosCuentaFecha(fechaInicial: String, fechaFinal: String): List<String>
+    ..
+    + generarOperacion(idCliente: String, idCuenta: String,saldo: double, tipo: TipoOperacion): void
+    - cantDiasEntreFechas(fecha1: String, fecha2: String)
+    - buscarCliente(): Cliente
+    - buscarCuenta(): Cuenta
+}
+
+
+class Cliente{
+    - {static} cantClientes = 100000 : int
+    - documento: String
+    - nombre: String
+    - domLegal: String
+    - tipoEnvio: TipoEnvio
+    - domPostal: String
+    - estado: EstadoCliente
+    - cuentas: List<Cuenta>
+    --
+    + Cliente()
+    ..
+    + getInfoCliente(): String
+    + getInfoCuentas(): List<String>
+    + getIdCliente(): String
+    + estaActivo(): boolean
+    ..
+    + getCuenta(idCuenta: String): Cuenta
+    + agregarCuenta(cuenta: Cuenta): void
+    - buscarCuenta(idCuenta): Cuenta
+}
+class Operacion{
+    - {static} candOperaciones: int
+    - id: String
+    - cliente: Cliente
+    - cuenta: Cuenta
+    - saldoAntesDeLaOp : String
+    - saldo: double
+    - tipo: TipoOperacion
+    - fecha: String
+    ..
+    + Operacion()
+    ..
+    + getTipoMovimiento(): TipoOperacion
+    + getInfoOperacion(): String
+    + getFechaOperacion(): String
+    + getSaldoCuentaAntesOperacion(): String
+}
+class Cuenta{
+    # moneda: Moneda
+    # saldo: double
+    # id: String
+    # ID_DOLARES='D'
+    # ID_PESOS='P'
+    --
+    + {abstract} getInfoCuenta()
+    + getSaldo(): double
+    + getIdCuenta(): String
+    ..
+    + esCuentaDolar(): boolean
+    + esCuentaPesos(): boolean
+    ..
+    + Cuenta()
+    ..
+    + agregarSaldo(saldo:double): void
+    + {abstract} extraerSaldo(saldo: double): void
+}
+class CajaAhorro extends Cuenta{
+    - {static} cantCA= 0: int
+    - ID_CUENTA='CA'
+    - IMPORTE_MANTENIMIENTO_BASE: double
+    - TASA_INTERES_MENSUAL: double
+}
+class CuentaCorriente extends Cuenta{
+    - {static} cantCC= 0: int
+    - ID_CUENTA='CC'
+    - id: String
+    - IMPORTE_MANTENIMIENTO_BASE: double
+    - LIMITE_DESCUBIERTO: double
+}
+enum TipoEnvio{
+    DIGITAL
+    DOMICILIO
+}
+enum EstadoCliente{
+    ACTIVO
+    INACTIVO
+}
+enum Moneda{
+    DOLAR
+    PESO
+}
+enum TipoOperacion{
+    DEPOSITO
+    EXTRACCION
+}
+@enduml
