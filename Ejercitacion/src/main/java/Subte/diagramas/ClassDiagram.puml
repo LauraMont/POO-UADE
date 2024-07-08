@@ -1,0 +1,67 @@
+@startuml
+
+SistemaSubte *-- Estacion
+SistemaSubte *-- LineaSubte
+SistemaSubte *-- SistemaSubte
+Estacion o-- LineaSubte
+LineaSubte *-- Vagon
+Vagon -- VagonAleman
+Vagon -- VagonArgentino
+Vagon -- VagonChino
+
+class SistemaSubte{
+    - lineaSubte : List<LineaSubte>
+    - estaciones : List<Estacion>
+    - {static} sistemasubte : SistemaSubte
+    + {static} getInstance(): SistemaSubte
+    + agregarEstacionLinea(nombreEstacion:String, nombreLinea:String): void
+    + crearEstacion(nombre:String, capacidad:int): void
+    + crearLineaSubte(nombre:String): void
+    + contarVagonesCompatibles(vagon:Vagon): int
+    + agregarVagonArgentino(nombre:String): void
+    + agregarVagonAleman(nombre:String): void
+    - agregarVagonChino(nombre:String): void
+    - buscarLinea(nombre:String): LineaSubte
+    - buscarEstacion(nombre:String): Estacion
+}
+class Estacion{
+    - capacidadMaxima: int
+    - nombre: String
+    - lineas: List<LineaSubte>
+    + agregarLinea(linea:LineaSubte): void
+    + superaLaCapacidad(capacidad:int): boolean
+    + sosEstacion(nombre:String): boolean
+}
+class LineaSubte{
+    - nombre: String
+    - vagones: List<Vagon>
+    - estaciones List<Estacion>
+    + agregarVagon(vagon:Vagon): boolean
+    + superaMaximoEstacion(vagon:Vagon): boolean
+    + esCompatibleConVagones(vagon:Vagon): boolean
+    + contarVagonesCompatibles(vagon:Vagon): int
+    + agregarEstacion(estacion:Estacion):void
+    + sosLinea(string:String): boolean
+}
+
+abstract class Vagon{
+    # capacidad:int
+    + velocidadMaxima(): double
+    + sosAleman():boolean
+    + sosArgentino():boolean
+    + sosChino():boolean
+    + somosCompatibles(vagon:Vagon):boolean
+}
+class VagonAleman{
+    + sosAleman():boolean
+    + somosCompatibles(vagon:Vagon):boolean
+}
+class VagonArgentino{
+    + sosArgentino():boolean
+    + somosCompatibles(vagon:Vagon):boolean
+}
+class VagonChino{
+    + sosChino():boolean
+    + somosCompatibles(vagon:Vagon):boolean
+}
+@enduml

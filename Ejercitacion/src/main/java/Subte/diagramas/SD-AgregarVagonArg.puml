@@ -1,0 +1,36 @@
+Agregar vagon argentino
+@startuml
+actor Main as main
+participant SistemaSubte as sistema
+participant VagonArgentino as vagon
+participant LineaSubte as linea
+
+main -> sistema: agregarVagonArgentino()
+    activate sistema
+    sistema -> vagon : create
+    vagon --> sistema : VagonArgentino
+    sistema -> sistema: agregarVagonArgentino(nombre:string, vagon: VagonArgentino)
+        activate sistema
+        sistema-> sistema: buscarLinea(nombre: String): Linea SistemaSubte
+            activate sistema
+            loop recorre las lineas
+                alt encontro la linea
+                    sistema --> sistema : LineaSubte
+                end
+            end
+            sistema --> main: LineaException
+            deactivate sistema
+        sistema -> linea: agregarVagon(vagon:Vagon):boolean
+        activate linea
+        linea -> linea: esCompatibleConVagones(vagon:Vagon): boolean
+        linea -> linea: superaMaximoEstacion(vagon:Vagon): boolean
+        alt si vagon es compatible y no supera maxima capacidad
+            linea --> sistema: true: boolean
+        else no se pudo agregar vagon
+            linea --> sistema : LineaException
+        end
+        deactivate linea
+    deactivate sistema
+sistema --> main: void
+deactivate sistema
+@enduml
