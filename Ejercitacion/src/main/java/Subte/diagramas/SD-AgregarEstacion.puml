@@ -1,0 +1,48 @@
+@startuml
+actor Main as main
+participant SistemaSubte as sistema
+participant VagonArgentino as vagon
+participant LineaSubte as linea
+participant Estacion as estacion
+
+
+main -> sistema: agregarEstacionLinea(nombreEstacion:String, nombreLinea:String)
+activate sistema
+    sistema -> sistema: buscarEstacion(nombreEstacion:String): Estacion
+    activate sistema
+        loop recorrer estaciones
+            sistema -> estacion: sosEstacion(nombreEstacion:String):boolean
+            alt es estacion
+                sistema --> sistema: Estacion
+            end
+        end
+        sistema -> main: EstacionException()
+    deactivate sistema
+    sistema -> sistema: buscarLinea(nombreLinea:String):LineaSubte
+    activate sistema
+        loop recorrer lineas
+            sistema -> linea: sosLinea(nombreLinea:String):boolean
+            alt es linea
+                sistema --> sistema: LineaSubte
+            end
+        end
+        sistema --> main: LineaException()
+    deactivate sistema
+    sistema -> estacion: agregarLinea(linea:LineaSubte):void
+    activate estacion
+        estacion -> estacion: superaLaCapacidad(capacidad: int): boolean
+        alt no supera (capacidad: int)
+            estacion -> estacion: lineas.add(linea)
+            estacion --> sistema: void
+        else
+            estacion --> sistema: EstacionException()
+        end
+    deactivate estacion
+    sistema -> linea: agregarEstacion
+    activate linea
+        linea -> linea: estaciones.add(estacion): void
+        linea --> sistema: void
+    deactivate linea
+    sistema --> main : void
+deactivate sistema
+@enduml

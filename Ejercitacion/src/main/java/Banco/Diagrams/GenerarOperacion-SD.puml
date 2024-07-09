@@ -1,0 +1,73 @@
+@startuml
+actor Main as main
+participant Banco as banco
+participant Cliente as cliente
+participant Operacion as op
+participant Cuenta as cuenta
+participant CuentaCorriente as cc
+participant CajaAhorro as ca
+
+main -> banco : generarOperacion (idCliente, idCuenta, saldo, tipo)
+activate banco
+banco -> banco: buscarCliente(idCliente)
+activate banco
+loop buscar cliente
+    banco -> cliente: getIdCliente()
+    cliente --> banco: idCliente
+    alt se encuentra coincidencia idClientes
+        banco -> cliente: estaActivo()
+    end
+end
+destroy banco
+banco -> banco: buscarCuenta(idCliente)
+activate banco
+
+loop buscar cuenta
+    banco -> cuenta: getIdCliente()
+    cuenta --> banco: id cuenta
+end
+destroy banco
+
+alt encontro cliente & esta activo & se encontro cuenta
+    banco -> op : new Operacion (cliente, cuenta, tipo, saldo)
+    activate op
+    op -> cuenta: getSaldo()
+    cuenta -> op : saldo actual
+    op -> op : setFechaHoy
+    op -> op : setIdOperacion
+    alt es deposito
+        op -> cuenta : agregarSaldo(saldo)
+        cuenta -> cuenta : agregaSaldo
+        op -> op : setSaldo
+    else es extraccion
+        alt es cuenta corriente
+            op -> cc : extraerSaldo(saldo)
+            activate cc
+                alt es cuenta pesos & saldo no supero limite descubierto + saldo total
+                    cc -> cc : descuentaSaldo
+                    cc --> op : true
+                else
+                    cc -> op : Error ("Saldo invalido para cuenta actual")
+                end
+            destroy cc
+        else es caja ahorro
+            op -> ca : extraerSaldo(saldo)
+            activate ca
+            alt saldo actual mayor a saldo extraido
+                ca --> op : Error("Saldo mayor al total en cuenta, no se puede extraer")
+            else saldo igual o menor al total en cuenta
+                ca -> ca : restarSaldo
+                ca --> op: true
+            end
+            destroy ca
+        end
+    end
+    op -> banco : operacion
+     destroy op
+else no se encontro cuenta o cliente
+    banco --> main: Error("No se encontro cliente o cuenta en el sistema")
+else cuenta inactiva
+    banco --> main: Error("Cuenta se encuetra inactiva")
+end
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+class SistemaTelecomunicaciones{
+    - estaciones : List<Estacion>
+    - sistema : SistemaTelecomunicaciones
+    + agregarEstacion(equipo: TipoEquipo)
+    + getEstaciones(): List<String>
+    + conectarEstaciones(idEstacion1: String, idEstacion2: String )
+}
+class Estacion{
+    - {static} cantEstaciones: int
+    - id : String
+    - equipo: Equipo
+    - posicion: Posicion
+    + Estacion(tipoEquipo: TipoEquipo)
+    + getInfoEstacion(): String
+    + conectarEstacion(estacion: Estacion): boolean
+}
+class Equipo{
+    - {static} cantEquipos: int
+    - id : String
+    - banda : String
+    - alcance: int
+    - frecuenciaInicio: int
+    - frecuenciaFin: int
+    + Equipo()
+
+}
+class Posicion{
+    - posicionX : int
+    - posicionY: int
+    + calculardistancia(posicion: Posicion): double
+    + getPosicionX(): double
+    + getPosicionY(): double
+}
+enum TipoEquipo{
+    HF
+    VHF
+    Multibanda
+}
+@enduml
